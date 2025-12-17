@@ -10,19 +10,17 @@ public static class HelicopterPatcher
 {
     [HarmonyPatch(typeof(PeakHandler), "SummonHelicopter")]
     [HarmonyPostfix]
-    static void SummonHelicopterPatch(PeakHandler __instance)
+    private static void SummonHelicopterPatch(PeakHandler __instance)
     {
         var order = __instance.endCutsceneAnimator.gameObject.GetOrAddComponent<HelicopterOrderController>();
 
-        // Only the host gets to generate a seating order and will replicate to other clients
-        
-        if (PhotonNetwork.IsMasterClient && Plugin.SeatingOrder == SeatingOrders.RANDOM)
-        {
-            Plugin.Log.LogInfo("Generating a random player order...");
-            var seatingOrder = PlayerHandler.GetAllPlayerCharacters().ConvertAll(c => c.view.ViewID).Shuffle();
-            PeakHandlerPatcher.ScoutOrder = seatingOrder;
-            order.photonView.RPC("SetupCutsceneOrder", RpcTarget.Others, seatingOrder);
-        }
-    }
+        // We're using a "fist passed the poll" system to replicate the sorting order
 
+        Plugin.Log.LogInfo("Generating a backup random player order...");
+        var seatingOrder = PlayerHandler.GetAllPlayerCharacters().ConvertAll(c => c.view.ViewID).Shuffle();
+        
+        Plugin.Log.LogInfo("Replicating random player order...");
+        order.photonView.RPC("SetupCutsceneOrder", RpcTarget.All, seatingOrder);
+    }    
+    
 }

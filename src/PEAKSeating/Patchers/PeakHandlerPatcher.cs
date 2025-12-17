@@ -13,7 +13,7 @@ public static class PeakHandlerPatcher
 {
     public static IList<int>? ScoutOrder { get; set; }
 
-    static int SortCharsDistance(Character a, Character b)
+    private static int SortCharsDistance(Character a, Character b)
     {
         var helicopterPosition = PeakHandler.Instance.endCutsceneAnimator.transform.position;
 
@@ -23,57 +23,51 @@ public static class PeakHandlerPatcher
         return positionA.CompareTo(positionB);
     }
 
-    static int SortCharsRandom(Character a, Character b)
+    private static int SortCharsRandom(Character a, Character b)
     {
         if (ScoutOrder == null)
         {
-            //  Not initialized.. 
-            Plugin.Log.LogError("The random order was not initialized. Using the default view");
+            //  Not initialized, so we'll fall back to vanilla sorting
+            Plugin.Log.LogError("Random scout seating order not initialized! Using the default seating order...");
 
             return a?.view.ViewID.CompareTo(b?.view.ViewID) ?? 0;
         }
         else
         {
-            var viewIdA = a?.view.ViewID ?? 0;
-            var viewIdB = b?.view.ViewID ?? 0;
+            var indexOfa = ScoutOrder.IndexOf(a?.view.ViewID ?? 0);
+            var indexOfb = ScoutOrder.IndexOf(b?.view.ViewID ?? 0);
 
-            var indexOfa = ScoutOrder.IndexOf(viewIdA);
-            var indexOfb = ScoutOrder.IndexOf(viewIdB);
-
+            // Sorting again the index so we'll eventually place every scout according to the random order
             return indexOfa.CompareTo(indexOfb);
         }
     }
 
-    static int SortCharsVanilla(Character a, Character b)
+    private static int SortCharsVanilla(Character a, Character b)
     {
         return a.view.ViewID - b.view.ViewID;
     }
 
-    static string GetOrderingFuncName()
+    private static string GetOrderingFuncName()
     {
-        switch (Plugin.SeatingOrder)
+        return Plugin.SeatingOrder switch
         {
-            case SeatingOrders.CLOSEST:
-                return nameof(SortCharsDistance);
-            case SeatingOrders.RANDOM:
-                return nameof(SortCharsRandom);
-            case SeatingOrders.VANILLA:
-                return nameof(SortCharsVanilla);
-            default:
-                throw new ArgumentOutOfRangeException(nameof(Plugin.SeatingOrder));
-        }
+            SeatingOrders.CLOSEST => nameof(SortCharsDistance),
+            SeatingOrders.RANDOM => nameof(SortCharsRandom),
+            SeatingOrders.VANILLA => nameof(SortCharsVanilla),
+            _ => throw new ArgumentOutOfRangeException(nameof(Plugin.SeatingOrder))
+        };
     }
 
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
     {
         var codeMatcher = new CodeMatcher(instructions);
 
-        // No need to patch if we use the vanilla order
+        // No need to patch if we use vanilla ordering
         if (Plugin.SeatingOrder != SeatingOrders.VANILLA)
         {
             Plugin.Log.LogInfo($"Patching sort for {Plugin.SeatingOrder.ToString().ToLower()} sorting...");
             
-            // We replace the standard Sort comparator to whatever function the player wants 
+            //Replacing the Sort lambda comparator to whatever order the player wants 
             return codeMatcher.MatchForward(false,
                     new CodeMatch(OpCodes.Ldftn),
                     new CodeMatch(OpCodes.Newobj),
@@ -85,6 +79,8 @@ public static class PeakHandlerPatcher
                 .InstructionEnumeration();
         }
 
+        Plugin.Log.LogInfo($"Not applying patch, because it's {Plugin.SeatingOrder.ToString().ToLower()} sorting...");
+        
         return codeMatcher.InstructionEnumeration();
     }
 }

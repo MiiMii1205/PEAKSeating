@@ -21,36 +21,46 @@ public partial class Plugin : BaseUnityPlugin
     {
         Log = Logger;
 
-        List<string> descrArray = [
-            "The seating order on the helicopter.",
-            "Possible values :",
-            "VANILLA - Scouts sits in vanilla order, i.e the order they joined the game",
-            "DISTANCE - Scouts sits according to how close they are to the helicopter",
-            "RANDOM - Scouts sits in a completely random order",
-        ];
-            
-        _configSeatingOrder = base.Config.Bind(
+        _configSeatingOrder = Config.Bind(
             "General",
             "Seating Order",
             SeatingOrders.VANILLA,
-            descrArray.Join(null,"/n")
+            ((List<string>) [
+                "The seating order on the helicopter.",
+                "Possible values :",
+                "VANILLA - Scouts sits in vanilla order, i.e the order they joined the game",
+                "DISTANCE - Scouts sits according to how close they are to the helicopter",
+                "RANDOM - Scouts sits in a completely random order",
+            ]).Join(null,"/n")
         );
 
         _configSeatingOrder.SettingChanged += RepatchHarmony;
 
-        _harmonyPatch.PatchAll(typeof(PeakHandlerPatcher));
-        _harmonyPatch.PatchAll(typeof(HelicopterPatcher));
-
+        PatchHarmony();
+        
         Log.LogInfo($"Plugin {Name} is loaded!");
     }
 
-    private static void RepatchHarmony(object sender, EventArgs e)
+    private void OnDestroy()
     {
-        Log.LogInfo("Unloading Patches");
+        Log.LogInfo("Unpatching Harmony Patches");
         _harmonyPatch.UnpatchSelf();
+        Log.LogInfo($"Plugin {Name} unloaded!");
+    }
 
-        Log.LogInfo("Reloading Patches");
+
+    private static void PatchHarmony()
+    {
         _harmonyPatch.PatchAll(typeof(PeakHandlerPatcher));
         _harmonyPatch.PatchAll(typeof(HelicopterPatcher));
+    }
+    
+    private static void RepatchHarmony(object sender, EventArgs e)
+    {
+        Log.LogInfo("Unpatching Harmony Patches");
+        _harmonyPatch.UnpatchSelf();
+
+        Log.LogInfo("Repatching Harmony Patches");
+        PatchHarmony();
     }
 }
