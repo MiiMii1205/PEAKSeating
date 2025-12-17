@@ -8,7 +8,7 @@ repository = "https://thunderstore.io"
 namespace = "OracleTeam"
 name = "PEAKSeating"
 description = "Changes the player order in the end cutscene (configurable)"
-websiteUrl = "" # TODO: Add a link to your mod repository here (optional)
+websiteUrl = "https://github.com/MiiMii1205/PEAKSeating"
 containsNsfwContent = false
 
 [package.dependencies]
