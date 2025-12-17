@@ -1,4 +1,4 @@
-﻿namespace PEAKSeating;
+﻿namespace PEAKSeating.Data;
 
 public enum SeatingOrders
 {

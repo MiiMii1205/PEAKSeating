@@ -4,6 +4,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using HarmonyLib;
+using PEAKSeating.Data;
 using PEAKSeating.Patchers;
 
 namespace PEAKSeating;

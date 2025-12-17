@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using HarmonyLib;
+using PEAKSeating.Data;
 using UnityEngine;
 
 namespace PEAKSeating.Patchers;
