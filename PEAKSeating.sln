@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PEAKSeating", "src\PEAKSeating\PEAKSeating.csproj", "{6498B59C-34F1-48C8-AA79-E15E387708EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6498B59C-34F1-48C8-AA79-E15E387708EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6498B59C-34F1-48C8-AA79-E15E387708EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6498B59C-34F1-48C8-AA79-E15E387708EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6498B59C-34F1-48C8-AA79-E15E387708EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
