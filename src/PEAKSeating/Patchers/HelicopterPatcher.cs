@@ -20,7 +20,7 @@ public static class HelicopterPatcher
         var seatingOrder = PlayerHandler.GetAllPlayerCharacters().ConvertAll(c => c.view.ViewID).Shuffle();
         
         Plugin.Log.LogInfo("Replicating random player order...");
-        order.photonView.RPC("SetupCutsceneOrder", RpcTarget.All, seatingOrder);
+        order.photonView.RPC("SetupCutsceneOrder", RpcTarget.All, order.photonView.ViewID, seatingOrder);
     }    
     
 }
