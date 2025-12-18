@@ -14,8 +14,8 @@ We also encourage player to have the same config, but you actually can have diff
 
 ## Configuration ##
 
-You can configure the mod to use a couple of sorting methods. By default, it's set to `DISTANCE`, but there are three (3) different modes in total:
+You can configure the mod to use a couple of sorting methods. By default, it's set to `CLOSEST`, but there are three (3) different modes in total:
 
 1. `VANILLA` - The default seating order, so by connection order _(host gets the first seat, then the next player that joined gets the next seat and so on)_
-2. `DISTANCE` - This seating order depends on the distance to the helicopter _(the closest player to it gets first, the second one gets the next seat and so on)_
+2. `CLOSEST` - This seating order depends on the distance to the helicopter _(the closest player to it gets first, the second one gets the next seat and so on)_
 3. `RANDOM` - A completely randomized seating order. It's replicated throughout the other players, so the order should stay consistent.

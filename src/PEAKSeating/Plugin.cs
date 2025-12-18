@@ -16,7 +16,7 @@ public partial class Plugin : BaseUnityPlugin
     private static Harmony _harmonyPatch = new(Id);
     internal static ManualLogSource Log { get; private set; } = null!;
 
-    public static SeatingOrders SeatingOrder => _configSeatingOrder?.Value ?? SeatingOrders.VANILLA;
+    public static SeatingOrders SeatingOrder => _configSeatingOrder?.Value ?? SeatingOrders.CLOSEST;
 
     private void Awake()
     {
@@ -25,13 +25,13 @@ public partial class Plugin : BaseUnityPlugin
         _configSeatingOrder = Config.Bind(
             "General",
             "Seating Order",
-            SeatingOrders.VANILLA,
+            SeatingOrders.CLOSEST,
             ((List<string>) [
                 "The seating order on the helicopter.",
                 "Possible values :",
-                "VANILLA - Scouts sits in vanilla order, i.e the order they joined the game",
-                "DISTANCE - Scouts sits according to how close they are to the helicopter",
-                "RANDOM - Scouts sits in a completely random order",
+                $"{SeatingOrders.VANILLA} - Scouts sits in vanilla order, i.e the order they joined the game",
+                $"{SeatingOrders.CLOSEST} - Scouts sits according to how close they are to the helicopter",
+                $"{SeatingOrders.RANDOM} - Scouts sits in a completely random order",
             ]).Join(null,"/n")
         );
 
